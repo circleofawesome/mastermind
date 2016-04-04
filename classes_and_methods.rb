@@ -20,7 +20,7 @@ end
 
 
 
-class Input
+class Game < Board
 	def controls
 		puts "1=RED   2=GRE   3=BLU   4=YEL   5=BRW   6=ORG   7=BLK   8=WHT"
 	end
