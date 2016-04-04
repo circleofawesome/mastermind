@@ -1,0 +1,28 @@
+-rows can be individual and take info/input as parameters 
+-the board will be all the rows printed at once
+-each row will have 4 boxes and 4 small boxes for keys 
+
+
+-RED GRE BLU YEL oo++ (2 reds and 2 whites)
+-BRW ORG BLK WHT  ----(empty)
+
+
+how to get AI to play mastermind:
+
+M1: pick red 4 times
+M2: if red is a color then pick green once and red (O O O Gr)
+M3: if green is a color then add it to list of colors; if key reveals no position match then first matched color should be in the last position 
+
+
+===
+m1:pick 2 colors (11 22)
+m2:if zero match then elim and pick next 2 colors (33 44)
+	else: if one match then do next 2 colors (22 33)
+m3:if zero match then 11 is one of the colors and then do (44 55)
+	else: if one match then do (11 33)
+m4:if one match then do next 2 colors (55 66)
+m5: if one match then do (44 66)
+m6: if zero match then 55 is one of the colors AND this means 77 and 88 are the remaining colors
+m7:put all 4 colors in order (11 22 33 44)
+m8: if no position matches then switch two at a time (33 44 11 22)
+m9: if no position matches then 
