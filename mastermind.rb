@@ -1,16 +1,20 @@
 class Board
 
+	@@prev_guesses={}
+	@@move_num=1
+	@@turn=1
 	def row(choices)
 		colors={1=>"RED",2=>"GRE",3=>"BLU",4=>"YEL",5=>"BRW",6=>"ORG",7=>"BLK",8=>"WHT"}
 		choices_num=[]
 		choices.each do |i|
 			choices_num<<i.to_i
 		end
-		puts"[ #{colors[choices_num[0]]} ][ #{colors[choices_num[1]]} ][ #{colors[choices_num[2]]} ][ #{colors[choices_num[3]]} ]"+"    "+
+		@@prev_guesses[@@move_num]="[ #{colors[choices_num[0]]} ][ #{colors[choices_num[1]]} ][ #{colors[choices_num[2]]} ][ #{colors[choices_num[3]]} ]"+"    "+"#{keys}"
+		puts"[ #{colors[choices_num[0]]} ][ #{colors[choices_num[1]]} ][ #{colors[choices_num[2]]} ][ #{colors[choices_num[3]]} ]"+"    "+keys
 	end
 
-	def keys(*key)
-
+	def keys
+		"----"
 	end
 
 	def empty_row
@@ -19,6 +23,15 @@ class Board
 
 	def board(moves_left)
 		moves_left.times{puts empty_row}
+	end
+
+	def prev_guesses
+		puts @@prev_guesses[@@move_num-1]
+		#while @@move_num<@@turn
+			#puts @@prev_guesses[@@move_num]
+			#@@move_num+=1
+		#end
+		#@@move_num=0
 	end
 end
 
@@ -59,6 +72,15 @@ class Game < Board
 			choices=user_choices
 			board(@@num_of_moves)
 			row(choices)
+			if @@turn>1
+				prev_guesses
+				
+				@@move_num+=1
+				@@turn+=1
+			else
+				@@turn+=1
+				@@move_num+=1
+			end
 			@@num_of_moves-=1
 		end
 	end
