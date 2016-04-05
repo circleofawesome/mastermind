@@ -26,12 +26,15 @@ class Board
 	end
 
 	def prev_guesses
-		puts @@prev_guesses[@@move_num-1]
+		#puts @@prev_guesses[@@move_num-1]
 		#while @@move_num<@@turn
-			#puts @@prev_guesses[@@move_num]
+			#puts @@prev_guesses[@@move_num-1]
 			#@@move_num+=1
 		#end
-		#@@move_num=0
+		prev_arr=@@prev_guesses.to_a.reverse.to_h
+		prev_arr.each do |k,v|
+			puts v unless k==@@turn
+		end
 	end
 end
 
