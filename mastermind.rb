@@ -26,11 +26,6 @@ class Board
 	end
 
 	def prev_guesses
-		#puts @@prev_guesses[@@move_num-1]
-		#while @@move_num<@@turn
-			#puts @@prev_guesses[@@move_num-1]
-			#@@move_num+=1
-		#end
 		prev_arr=@@prev_guesses.to_a.reverse.to_h
 		prev_arr.each do |k,v|
 			puts v unless k==@@turn
@@ -62,7 +57,7 @@ class Game < Board
 		box2=gets.chomp
 		print "Select your third guess:"
 		box3=gets.chomp
-		print "Select your third guess:"
+		print "Select your last guess:"
 		box4=gets.chomp
 		user_choices=[box1,box2,box3,box4]
 	end
@@ -70,22 +65,25 @@ class Game < Board
 	def play
 		board(@@num_of_moves)
 		@@num_of_moves-=1
-		computer_selection
+		comp_sel=computer_selection
+		puts comp_sel #delete this after you finish writing the program
+
 		while @@num_of_moves>0
 			choices=user_choices
+			choices.map!{|i|i.to_i}
+			break if choices.eql?(comp_sel)
 			board(@@num_of_moves)
 			row(choices)
 			if @@turn>1
 				prev_guesses
-				
-				@@move_num+=1
 				@@turn+=1
 			else
 				@@turn+=1
-				@@move_num+=1
 			end
 			@@num_of_moves-=1
+			@@move_num+=1
 		end
+		puts "You won!" if @@num_of_moves>0
 	end
 end
 
