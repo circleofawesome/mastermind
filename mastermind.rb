@@ -35,8 +35,13 @@ class Board
 		plus.each do |i|
 			circles<<i	
 		end
-		return "----" if circles==[]
-		@@prev_keys[@@move_num]=circles.join('')
+		#return "----" if circles==[]
+		#@@prev_keys[@@move_num]=circles.join('')
+		if circles==[]
+			return @@prev_keys[@@move_num]="----"
+		else
+			return @@prev_keys[@@move_num]=circles.join('')
+		end
 	end
 
 	def empty_row
@@ -47,10 +52,21 @@ class Board
 		moves_left.times{puts empty_row}
 	end
 
-	def prev_guesses
-		prev_arr=@@prev_guesses.to_a.reverse.to_h
+	def prev_keys
+		prev_arr=@@prev_keys.to_a.reverse.to_h
 		prev_arr.each do |k,v|
 			puts v unless k==@@turn
+		end
+	end
+
+	def prev_guesses
+		prevG_arr=@@prev_guesses.to_a.reverse.to_h
+		prevK_arr=@@prev_keys.to_a.reverse.to_h
+		#prevG_arr.each do |k,v|
+		#	puts v unless k==@@turn
+		#end
+		for i in 1..prevG_arr.length-1
+			puts prevG_arr[i] + prevK_arr[i]
 		end
 	end
 end
@@ -90,7 +106,7 @@ class Game < Board
 		comp_sel=computer_selection
 		puts comp_sel #delete this after you finish writing the program
 
-		while @@num_of_moves>0
+		while @@num_of_moves>-1
 			choices=user_choices
 			choices.map!{|i|i.to_i}
 			break if choices.eql?(comp_sel)
