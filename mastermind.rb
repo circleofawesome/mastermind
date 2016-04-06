@@ -111,7 +111,9 @@ class Game < Board
 
 	@@num_of_moves=12
 	def controls
+		2.times{puts "\n"}
 		puts "1=RED   2=GRE   3=BLU   4=YEL   5=BRW   6=ORG   7=BLK   8=WHT"
+		puts "These are the buttons. Enter each color one by one below!"
 	end
 
 	def computer_selection
@@ -123,27 +125,31 @@ class Game < Board
 	end
 
 	def user_choices
-		print "Select your first guess:"
+		controls
+		print "First color:"
 		box1=gets.chomp
-		print "Select your second guess:"
+		print "Second color:"
 		box2=gets.chomp
-		print "Select your third guess:"
+		print "Third color:"
 		box3=gets.chomp
-		print "Select your last guess:"
+		print "Fourth color:"
 		box4=gets.chomp
+		2.times{puts "\n"}
 		user_choices=[box1,box2,box3,box4]
 	end
 
 	def play
+		puts "   -= M A S T E R M I N D =-"
 		board(@@num_of_moves)
 		@@num_of_moves-=1
 		comp_sel=computer_selection
-		puts comp_sel #delete this after you finish writing the program
+		#puts comp_sel #delete this after you finish writing the program
 
 		while @@num_of_moves>-1
 			choices=user_choices
 			choices.map!{|i|i.to_i}
 			break if choices.eql?(comp_sel)
+			puts "   -= M A S T E R M I N D =-"
 			board(@@num_of_moves)
 			puts row(choices)+keys(choices,comp_sel)
 			if @@turn>1
@@ -155,12 +161,13 @@ class Game < Board
 			@@num_of_moves-=1
 			@@move_num+=1
 		end
+		4.times{puts "\n"}
 		puts "You won!" if @@num_of_moves>0
+		puts "You lost :(" if @@num_of_moves<=0
 	end
 end
 
 
 g1=Game.new
-puts "lets play"
 g1.play
 
