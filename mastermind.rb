@@ -15,28 +15,56 @@ class Board
 		@@prev_guesses[@@move_num]="[ #{colors[choices_num[0]]} ][ #{colors[choices_num[1]]} ][ #{colors[choices_num[2]]} ][ #{colors[choices_num[3]]} ]"+"    "
 	end
 
-	def keys(user,computer)
+	def keys(user,comp)
 		circles=[]
-		plus=[]
-		
+		plusses=[]
+	
+		user_nums=[]
+		comp_nums=[]
+	
+		plus_count=0
+	
+	
 		user.each_index do |i|
-			circles<<"O" if user[i]==computer[i]
+			circles<<"O" if user[i]==comp[i]
 		end
-		
+	
 		user.each do |i|
-			plus<<"+" if computer.include?(i)
+			user_nums<<i unless user_nums.include?(i)
 		end
-
-
-		circles.length.times {
-			plus.pop
-		}
 		
-		plus.each do |i|
+		comp.each do |i|
+			comp_nums<<i unless comp_nums.include?(i)
+		end
+	
+	
+		user_nums.each do |i|
+			user_count=user.count(i)
+			comp_count=comp.count(i)
+			
+			if user_count>comp_count
+				plus_count=comp_count
+			elsif comp_count>user_count
+				plus_count=user_count
+			elsif user_count==comp_count
+				plus_count=user_count
+			else
+				plus_count=0
+			end
+			
+			plus_count.times {
+				plusses<<"+"
+			}
+		end
+	
+		circles.length.times {
+				plusses.pop
+			}
+			
+		plusses.each do |i|
 			circles<<i	
 		end
-		#return "----" if circles==[]
-		#@@prev_keys[@@move_num]=circles.join('')
+		
 		if circles==[]
 			return @@prev_keys[@@move_num]="----"
 		else
@@ -60,14 +88,20 @@ class Board
 	end
 
 	def prev_guesses
-		prevG_arr=@@prev_guesses.to_a.reverse.to_h
-		prevK_arr=@@prev_keys.to_a.reverse.to_h
-		#prevG_arr.each do |k,v|
-		#	puts v unless k==@@turn
+		#prevG_arr=@@prev_guesses.to_a.reverse.to_h
+		#prevK_arr=@@prev_keys.to_a.reverse.to_h
+		#prevG_arr.each do |k,v|  ###
+		#	puts v unless k==@@turn ###
+		#end  ###
+		#for i in 1..prevG_arr.length-1
+		#	puts prevG_arr[i] + prevK_arr[i]
 		#end
-		for i in 1..prevG_arr.length-1
-			puts prevG_arr[i] + prevK_arr[i]
-		end
+		#puts @@prev_guesses
+		count=@@prev_guesses.length-1
+		count.times {
+			puts @@prev_guesses[count]+@@prev_keys[count]
+			count-=1
+		}
 	end
 end
 
