@@ -1,6 +1,7 @@
 class Board
 
 	@@prev_guesses={}
+	@@prev_keys={}
 	@@move_num=1
 	@@turn=1
 	def row(choices)
@@ -9,12 +10,33 @@ class Board
 		choices.each do |i|
 			choices_num<<i.to_i
 		end
-		@@prev_guesses[@@move_num]="[ #{colors[choices_num[0]]} ][ #{colors[choices_num[1]]} ][ #{colors[choices_num[2]]} ][ #{colors[choices_num[3]]} ]"+"    "+"#{keys}"
-		puts"[ #{colors[choices_num[0]]} ][ #{colors[choices_num[1]]} ][ #{colors[choices_num[2]]} ][ #{colors[choices_num[3]]} ]"+"    "+keys
+		#@@prev_guesses[@@move_num]="[ #{colors[choices_num[0]]} ][ #{colors[choices_num[1]]} ][ #{colors[choices_num[2]]} ][ #{colors[choices_num[3]]} ]"+"    "+"#{keys}"
+		#puts"[ #{colors[choices_num[0]]} ][ #{colors[choices_num[1]]} ][ #{colors[choices_num[2]]} ][ #{colors[choices_num[3]]} ]"+"    "+keys
+		@@prev_guesses[@@move_num]="[ #{colors[choices_num[0]]} ][ #{colors[choices_num[1]]} ][ #{colors[choices_num[2]]} ][ #{colors[choices_num[3]]} ]"+"    "
 	end
 
-	def keys
-		"----"
+	def keys(user,computer)
+		circles=[]
+		plus=[]
+		
+		user.each_index do |i|
+			circles<<"O" if user[i]==computer[i]
+		end
+		
+		user.each do |i|
+			plus<<"+" if computer.include?(i)
+		end
+
+
+		circles.length.times {
+			plus.pop
+		}
+		
+		plus.each do |i|
+			circles<<i	
+		end
+		return "----" if circles==[]
+		@@prev_keys[@@move_num]=circles.join('')
 	end
 
 	def empty_row
@@ -73,7 +95,7 @@ class Game < Board
 			choices.map!{|i|i.to_i}
 			break if choices.eql?(comp_sel)
 			board(@@num_of_moves)
-			row(choices)
+			puts row(choices)+keys(choices,comp_sel)
 			if @@turn>1
 				prev_guesses
 				@@turn+=1
