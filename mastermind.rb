@@ -107,7 +107,7 @@ end
 
 
 
-class Game < Board
+class Player_Codebreaker < Board
 
 	@@num_of_moves=12
 	def controls
@@ -177,7 +177,32 @@ class Game < Board
 	end
 end
 
+class AI_Codebreaker<Board
+		def players_code
+			puts "1=RED   2=GRE   3=BLU   4=YEL   5=BRW   6=ORG   7=BLK   8=WHT"
+			print "These are the buttons. Please enter a 4 color code separated by spaces: "
+			code=gets.chomp
+			code=code.split
+			code.map! do |i|
+				i.to_i
+			end
+			
+			code.each do |i|
+				if i==nil
+					return players_code
+				elsif i<1
+					return players_code
+				elsif i>8
+					return players_code
+				end
+			end
+			return players_code if code.empty?
+			return players_code if code.length!=4
+			return code
+		end
+end
 
-g1=Game.new
+
+g1=Player_Codebreaker.new
 g1.play
 

@@ -15,28 +15,56 @@ class Board
 		@@prev_guesses[@@move_num]="[ #{colors[choices_num[0]]} ][ #{colors[choices_num[1]]} ][ #{colors[choices_num[2]]} ][ #{colors[choices_num[3]]} ]"+"    "
 	end
 
-	def keys(user,computer)
+	def keys(user,comp)
 		circles=[]
-		plus=[]
-		
+		plusses=[]
+	
+		user_nums=[]
+		comp_nums=[]
+	
+		plus_count=0
+	
+	
 		user.each_index do |i|
-			circles<<"O" if user[i]==computer[i]
+			circles<<"O" if user[i]==comp[i]
 		end
-		
+	
 		user.each do |i|
-			plus<<"+" if computer.include?(i)
+			user_nums<<i unless user_nums.include?(i)
 		end
-
-
-		circles.length.times {
-			plus.pop
-		}
 		
-		plus.each do |i|
+		comp.each do |i|
+			comp_nums<<i unless comp_nums.include?(i)
+		end
+	
+	
+		user_nums.each do |i|
+			user_count=user.count(i)
+			comp_count=comp.count(i)
+			
+			if user_count>comp_count
+				plus_count=comp_count
+			elsif comp_count>user_count
+				plus_count=user_count
+			elsif user_count==comp_count
+				plus_count=user_count
+			else
+				plus_count=0
+			end
+			
+			plus_count.times {
+				plusses<<"+"
+			}
+		end
+	
+		circles.length.times {
+				plusses.pop
+			}
+			
+		plusses.each do |i|
 			circles<<i	
 		end
-		#return "----" if circles==[]
-		#@@prev_keys[@@move_num]=circles.join('')
+		
 		if circles==[]
 			return @@prev_keys[@@move_num]="----"
 		else
@@ -60,14 +88,20 @@ class Board
 	end
 
 	def prev_guesses
-		prevG_arr=@@prev_guesses.to_a.reverse.to_h
-		prevK_arr=@@prev_keys.to_a.reverse.to_h
-		#prevG_arr.each do |k,v|
-		#	puts v unless k==@@turn
+		#prevG_arr=@@prev_guesses.to_a.reverse.to_h
+		#prevK_arr=@@prev_keys.to_a.reverse.to_h
+		#prevG_arr.each do |k,v|  ###
+		#	puts v unless k==@@turn ###
+		#end  ###
+		#for i in 1..prevG_arr.length-1
+		#	puts prevG_arr[i] + prevK_arr[i]
 		#end
-		for i in 1..prevG_arr.length-1
-			puts prevG_arr[i] + prevK_arr[i]
-		end
+		#puts @@prev_guesses
+		count=@@prev_guesses.length-1
+		count.times {
+			puts @@prev_guesses[count]+@@prev_keys[count]
+			count-=1
+		}
 	end
 end
 
@@ -77,7 +111,9 @@ class Game < Board
 
 	@@num_of_moves=12
 	def controls
+		2.times{puts "\n"}
 		puts "1=RED   2=GRE   3=BLU   4=YEL   5=BRW   6=ORG   7=BLK   8=WHT"
+		puts "These are the buttons. Enter each color separated by a space!"
 	end
 
 	def computer_selection
@@ -89,27 +125,39 @@ class Game < Board
 	end
 
 	def user_choices
-		print "Select your first guess:"
-		box1=gets.chomp
-		print "Select your second guess:"
-		box2=gets.chomp
-		print "Select your third guess:"
-		box3=gets.chomp
-		print "Select your last guess:"
-		box4=gets.chomp
-		user_choices=[box1,box2,box3,box4]
+		controls
+		print "Your guesses:"
+		guesses=gets.chomp
+		guesses=guesses.split
+		guesses.map! {|i|
+			i.to_i
+		}
+		guesses.each do |i|
+			if i==nil
+				return user_choices
+			elsif i<1
+				return user_choices
+			elsif i>8
+				return user_choices
+			end
+		end
+		return user_choices if guesses.empty?
+		return user_choices if guesses.length!=4
+		return guesses
 	end
 
 	def play
+		puts "   -= M A S T E R M I N D =-"
 		board(@@num_of_moves)
 		@@num_of_moves-=1
 		comp_sel=computer_selection
-		puts comp_sel #delete this after you finish writing the program
+		#puts comp_sel #delete this after you finish writing the program
 
 		while @@num_of_moves>-1
 			choices=user_choices
 			choices.map!{|i|i.to_i}
 			break if choices.eql?(comp_sel)
+			puts "   -= M A S T E R M I N D =-"
 			board(@@num_of_moves)
 			puts row(choices)+keys(choices,comp_sel)
 			if @@turn>1
@@ -121,72 +169,15 @@ class Game < Board
 			@@num_of_moves-=1
 			@@move_num+=1
 		end
+		4.times{puts "\n"}
+
+		puts "Computer picked: "+"#{row(comp_sel)}"
 		puts "You won!" if @@num_of_moves>0
+		puts "You lost :(" if @@num_of_moves<=0
 	end
 end
 
 
 g1=Game.new
-puts "lets play"
 g1.play
 
-
-
-
-
-
-
-
-
-
-def keys (user,comp)
-	circles=[]
-	plusses=[]
-	
-	user_nums=[]
-	comp_nums=[]
-	
-	plus_count=0
-	
-	
-	user.each_index do |i|
-			circles<<"O" if user[i]==comp[i]
-	end
-	
-	user.each do |i|
-		user_nums<<i unless user_nums.include?(i)
-	end
-	
-	comp.each do |i|
-		comp_nums<<i unless comp_nums.include?(i)
-	end
-	
-	
-	user_nums.each do |i|
-		user_count=user.count(i)
-		comp_count=comp.count(i)
-		
-		if user_count>comp_count
-			plus_count=comp_count
-		elsif comp_count>user_count
-			plus_count=user_count
-		elsif user_count==comp_count
-			plus_count=user_count
-		else
-			plus_count=0
-		end
-		
-		plus_count.times {
-			plusses<<"+"
-		}
-	end
-	
-	circles.length.times {
-			plusses.pop
-		}
-		
-	plusses.each do |i|
-		circles<<i	
-	end
-	circles
-end
