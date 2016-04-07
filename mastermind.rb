@@ -204,6 +204,11 @@ class AI_Codebreaker<Board
 
 		def player_keys
 			print "Enter the keys here: "
+			keys=gets.chomp
+			keys=keys.split
+			keys.select!{|i|i=~/[O+-]/}
+			return player_keys if keys.length!=4
+			keys
 		end
 
 		def AI_guess
