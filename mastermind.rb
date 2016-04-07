@@ -178,6 +178,7 @@ class Player_Codebreaker < Board
 end
 
 class AI_Codebreaker<Board
+		@@num_of_moves=12
 		def players_code
 			puts "1=RED   2=GRE   3=BLU   4=YEL   5=BRW   6=ORG   7=BLK   8=WHT"
 			print "These are the buttons. Please enter a 4 color code separated by spaces: "
@@ -200,9 +201,29 @@ class AI_Codebreaker<Board
 			return players_code if code.length!=4
 			return code
 		end
+
+		def player_keys
+			print "Enter the keys here: "
+		end
+
+		def AI_guess
+			num=rand(1..8)
+			guesses=[num,num,num,num]
+			#not finished yet
+		end
+
+		def play
+			puts "   -= M A S T E R M I N D =-"
+			board(@@num_of_moves)
+			@@num_of_moves-=1
+			player_sel=players_code
+		end
 end
 
 
-g1=Player_Codebreaker.new
-g1.play
+#g1=Player_Codebreaker.new
+#g1.play
+
+g2=AI_Codebreaker.new
+g2.play
 
