@@ -113,7 +113,7 @@ class Game < Board
 	def controls
 		2.times{puts "\n"}
 		puts "1=RED   2=GRE   3=BLU   4=YEL   5=BRW   6=ORG   7=BLK   8=WHT"
-		puts "These are the buttons. Enter each color one by one below!"
+		puts "These are the buttons. Enter each color separated by a space!"
 	end
 
 	def computer_selection
@@ -126,16 +126,24 @@ class Game < Board
 
 	def user_choices
 		controls
-		print "First color:"
-		box1=gets.chomp
-		print "Second color:"
-		box2=gets.chomp
-		print "Third color:"
-		box3=gets.chomp
-		print "Fourth color:"
-		box4=gets.chomp
-		2.times{puts "\n"}
-		user_choices=[box1,box2,box3,box4]
+		print "Your guesses:"
+		guesses=gets.chomp
+		guesses=guesses.split
+		guesses.map! {|i|
+			i.to_i
+		}
+		guesses.each do |i|
+			if i==nil
+				return user_choices
+			elsif i<1
+				return user_choices
+			elsif i>8
+				return user_choices
+			end
+		end
+		return user_choices if guesses.empty?
+		return user_choices if guesses.length!=4
+		return guesses
 	end
 
 	def play
@@ -162,6 +170,8 @@ class Game < Board
 			@@move_num+=1
 		end
 		4.times{puts "\n"}
+
+		puts "Computer picked: "+"#{row(comp_sel)}"
 		puts "You won!" if @@num_of_moves>0
 		puts "You lost :(" if @@num_of_moves<=0
 	end
