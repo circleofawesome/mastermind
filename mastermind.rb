@@ -177,8 +177,9 @@ class Player_Codebreaker < Board
 	end
 end
 
-class AI_Codebreaker<Board
+class AI_Codebreaker < Board
 		@@num_of_moves=12
+		@@correct_colors=[]
 		def players_code
 			puts "1=RED   2=GRE   3=BLU   4=YEL   5=BRW   6=ORG   7=BLK   8=WHT"
 			print "These are the buttons. Please enter a 4 color code separated by spaces: "
@@ -203,7 +204,12 @@ class AI_Codebreaker<Board
 		end
 
 		def player_keys
-			print "Enter the keys here: "
+			2.times{puts "\n"}
+			puts "What did I get right?"
+			puts " '+'=Correct Color & Wrong Position"
+			puts " 'O'=Correct Color & Correct Position"
+			puts " '-'=Neither "
+			print "Enter the 4 keys here: "
 			keys=gets.chomp
 			keys=keys.split
 			keys.select!{|i|i=~/[O+-]/}
@@ -211,17 +217,40 @@ class AI_Codebreaker<Board
 			keys
 		end
 
-		def AI_guess
+		def comp_guess(turn_num)
 			num=rand(1..8)
 			guesses=[num,num,num,num]
 			#not finished yet
 		end
 
+		def key_reader(keys,comp_sel)
+			#keys.include?("O")
+			@@correct_colors<<comp_sel[0] if keys.include?("O")
+			@@correct_colors
+		end
+
 		def play
+			game_won=false
 			puts "   -= M A S T E R M I N D =-"
 			board(@@num_of_moves)
 			@@num_of_moves-=1
 			player_sel=players_code
+			turn_num=1
+			while game_won==false
+				puts "   -= M A S T E R M I N D =-"
+				board(@@num_of_moves)
+				@@num_of_moves-=1
+				comp_sel=comp_guess(turn_num)
+				#puts row(comp_guess(turn_num))
+				puts row(comp_sel)
+				turn_num+=1
+				keys=player_keys
+				key_reader(keys,comp_sel)
+				puts @@correct_colors
+				puts "hello"
+
+				#break #remove this later
+			end
 		end
 end
 
