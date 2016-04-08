@@ -180,6 +180,7 @@ end
 class AI_Codebreaker < Board
 		@@num_of_moves=12
 		@@correct_colors=[]
+		@@computers_selections={}
 		def players_code
 			puts "1=RED   2=GRE   3=BLU   4=YEL   5=BRW   6=ORG   7=BLK   8=WHT"
 			print "These are the buttons. Please enter a 4 color code separated by spaces: "
@@ -200,6 +201,7 @@ class AI_Codebreaker < Board
 			end
 			return players_code if code.empty?
 			return players_code if code.length!=4
+			#@@secret_code=code
 			return code
 		end
 
@@ -217,9 +219,11 @@ class AI_Codebreaker < Board
 			keys
 		end
 
-		def comp_guess(turn_num)
-			num=rand(1..8)
-			guesses=[num,num,num,num]
+		def comp_guess
+			#num=rand(1..8)
+			#guesses=[num,num,num,num]
+			@@computers_selections[1]=[1,1,1,1]
+			[1,1,1,1]
 			#not finished yet
 		end
 
@@ -230,27 +234,29 @@ class AI_Codebreaker < Board
 		end
 
 		def play
-			game_won=false
 			puts "   -= M A S T E R M I N D =-"
 			board(@@num_of_moves)
 			@@num_of_moves-=1
 			player_sel=players_code
 			turn_num=1
-			while game_won==false
+			while @@num_of_moves>0
 				puts "   -= M A S T E R M I N D =-"
 				board(@@num_of_moves)
 				@@num_of_moves-=1
-				comp_sel=comp_guess(turn_num)
-				#puts row(comp_guess(turn_num))
+				comp_sel=comp_guess
+				return winning_message if player_sel.eql?(comp_sel)
+				#puts row(comp_guess
 				puts row(comp_sel)
-				turn_num+=1
 				keys=player_keys
 				key_reader(keys,comp_sel)
-				puts @@correct_colors
-				puts "hello"
 
 				#break #remove this later
 			end
+		end
+
+		def winning_message
+			puts row(@@computers_selections[1])
+			puts "I guessed correctly! I win! You lose!"
 		end
 end
 
