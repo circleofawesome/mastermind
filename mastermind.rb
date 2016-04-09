@@ -99,7 +99,8 @@ class Board
 		#puts @@prev_guesses
 		count=@@prev_guesses.length-1
 		count.times {
-			puts @@prev_guesses[count]+@@prev_keys[count]
+			#puts @@prev_guesses[count]+@@prev_keys[count] 
+			puts @@prev_guesses[count] 
 			count-=1
 		}
 	end
@@ -222,23 +223,31 @@ class AI_Codebreaker < Board
 		def comp_guess
 			#num=rand(1..8)
 			#guesses=[num,num,num,num]
-			@@computers_selections[1]=[1,1,1,1]
-			[1,1,1,1]
+			#@@computers_selections[1]=[1,1,1,1]
 			#not finished yet
+			guess=[]
+			4.times{guess<<@@guess_count} if @@correct_colors.length!=4
+			@@guess_count+=1
+			return guess
 		end
 
 		def key_reader(keys,comp_sel)
 			#keys.include?("O")
-			@@correct_colors<<comp_sel[0] if keys.include?("O")
-			@@correct_colors
+			#@@correct_colors<<comp_sel[0] if keys.include?("O")
+			#@@correct_colors
+			num_Os=keys.count("O")
+			num_Os.times {
+				@@correct_colors<<comp_sel[0]
+			}
 		end
 
 		def play
+			@@guess_count=1
 			puts "   -= M A S T E R M I N D =-"
 			board(@@num_of_moves)
 			@@num_of_moves-=1
 			player_sel=players_code
-			turn_num=1
+			#turn_num=1
 			while @@num_of_moves>0
 				puts "   -= M A S T E R M I N D =-"
 				board(@@num_of_moves)
@@ -247,9 +256,11 @@ class AI_Codebreaker < Board
 				return winning_message if player_sel.eql?(comp_sel)
 				#puts row(comp_guess
 				puts row(comp_sel)
+				prev_guesses
 				keys=player_keys
 				key_reader(keys,comp_sel)
-
+				@@move_num+=1
+				#prev_guesses
 				#break #remove this later
 			end
 		end
