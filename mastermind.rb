@@ -99,8 +99,8 @@ class Board
 		#puts @@prev_guesses
 		count=@@prev_guesses.length-1
 		count.times {
-			#puts @@prev_guesses[count]+@@prev_keys[count] 
-			puts @@prev_guesses[count] 
+			puts @@prev_guesses[count]+@@prev_keys[count] unless @@prev_keys.empty?
+			puts @@prev_guesses[count] if @@prev_keys.empty?
 			count-=1
 		}
 	end
@@ -217,7 +217,9 @@ class AI_Codebreaker < Board
 			keys=keys.split
 			keys.select!{|i|i=~/[O+-]/}
 			return player_keys if keys.length!=4
-			keys
+			#keys
+			@@prev_keys[@@move_num]=keys.join
+			return keys
 		end
 
 		def comp_guess
