@@ -228,6 +228,7 @@ class AI_Codebreaker < Board
 			if @@guess_count==8 && @@correct_colors.length!=4
 				@@correct_colors<<8
 				guess=comp_guess_position(@@correct_colors)
+				@@position_count+=1
 				#might be an issue here with guess_count==8, the 8 might need to change
 			end
 			4.times{guess<<@@guess_count} if @@correct_colors.length!=4
@@ -235,6 +236,7 @@ class AI_Codebreaker < Board
 
 			if @@correct_colors.length==4
 				guess=comp_guess_position(@@correct_colors)
+				@@position_count+=1
 			end
 			return guess
 		end
@@ -242,16 +244,35 @@ class AI_Codebreaker < Board
 		def comp_guess_position(colors)
 			#returns array of guesses 
 			return colors.sort! if @@position_count==1
-			if colors
-				
+			case @@position_count
+			when 2
+				#@@position_count+=1
+				return [colors[1],colors[0],colors[3],colors[2]]
+			when 3
+				#@@position_count+=1
+				return [colors[2],colors[3],colors[0],colors[1]]
+			when 4
+				#@@position_count+=1
+				return [colors[3],colors[2],colors[1],colors[0]]
+			when 5
+				#@@position_count+=1
+				return [colors[3],colors[2],colors[0],colors[1]]
+			when 6
+				#@@position_count+=1
+				return [colors[3],colors[0],colors[2],colors[1]]
+			when 7
+				#@@position_count+=1
+				return [colors[3],colors[2],colors[1],colors[0]]
+			when 8
+				return [colors[2],colors[1],colors[0],colors[3]]
 			end
-
 		end
 
 		def key_reader(keys,comp_sel)
 			#keys.include?("O")
 			#@@correct_colors<<comp_sel[0] if keys.include?("O")
 			#@@correct_colors
+			return @@correct_colors if @@correct_colors.length==4
 			num_Os=keys.count("O")
 			num_Os.times {
 				@@correct_colors<<comp_sel[0]
