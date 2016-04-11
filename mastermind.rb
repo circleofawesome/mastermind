@@ -182,6 +182,7 @@ class AI_Codebreaker < Board
 		@@num_of_moves=12
 		@@correct_colors=[]
 		@@computers_selections={}
+		@@position_count=1
 		def players_code
 			puts "1=RED   2=GRE   3=BLU   4=YEL   5=BRW   6=ORG   7=BLK   8=WHT"
 			print "These are the buttons. Please enter a 4 color code separated by spaces: "
@@ -222,15 +223,29 @@ class AI_Codebreaker < Board
 			return keys
 		end
 
-		def comp_guess
-			#num=rand(1..8)
-			#guesses=[num,num,num,num]
-			#@@computers_selections[1]=[1,1,1,1]
-			#not finished yet
+		def comp_guess_colors
 			guess=[]
+			if @@guess_count==8 && @@correct_colors.length!=4
+				@@correct_colors<<8
+				guess=comp_guess_position(@@correct_colors)
+				#might be an issue here with guess_count==8, the 8 might need to change
+			end
 			4.times{guess<<@@guess_count} if @@correct_colors.length!=4
 			@@guess_count+=1
+
+			if @@correct_colors.length==4
+				guess=comp_guess_position(@@correct_colors)
+			end
 			return guess
+		end
+
+		def comp_guess_position(colors)
+			#returns array of guesses 
+			return colors.sort! if @@position_count==1
+			if colors
+				
+			end
+
 		end
 
 		def key_reader(keys,comp_sel)
@@ -252,23 +267,28 @@ class AI_Codebreaker < Board
 			#turn_num=1
 			while @@num_of_moves>0
 				puts "   -= M A S T E R M I N D =-"
+				comp_sel=comp_guess_colors
+				return winning_message(comp_sel) if player_sel.eql?(comp_sel)
 				board(@@num_of_moves)
 				@@num_of_moves-=1
-				comp_sel=comp_guess
-				return winning_message if player_sel.eql?(comp_sel)
-				#puts row(comp_guess
+				#comp_sel=comp_guess_colors
+				#return winning_message if player_sel.eql?(comp_sel)
+					##puts row(comp_guess_colors)
 				puts row(comp_sel)
 				prev_guesses
 				keys=player_keys
 				key_reader(keys,comp_sel)
 				@@move_num+=1
+				2.times{puts "\n"}
 				#prev_guesses
 				#break #remove this later
 			end
+			return "You win :(" if @@num_of_moves==0
 		end
 
-		def winning_message
-			puts row(@@computers_selections[1])
+		def winning_message(comp_sel)
+			puts "  "+row(comp_sel)
+			1.times{puts "\n"}
 			puts "I guessed correctly! I win! You lose!"
 		end
 end
