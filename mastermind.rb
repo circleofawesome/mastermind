@@ -244,41 +244,26 @@ class AI_Codebreaker < Board
 
 		def comp_guess_position(colors)
 			#returns array of guesses 
-			return colors.sort! if @@position_count==1
+			return colors.shuffle! if @@position_count==1
 			keys=@@prev_keys[@@move_num-1].split('')
-			if keys.count("O")==1
-				return one_circle(colors)
-			elsif keys.count("O")==2
-				return two_circle(colors)
-			elsif keys.count("O")==3
-				return three_circle(colors)
-			elsif keys.count("O")==0
+			circles=keys.count("O")
+			case circles
+			when 0
 				return zero_circle(colors)
+			when 1
+				return one_circle(colors)
+			when 2
+				return two_circle(colors)
 			end
 		end
 
 		def zero_circle(colors)
-			#colors.reverse
-			return colors.shuffle if @@prev_keys[@@move_num-1].split('').count("O")==0
-			return #LEFT OFF HERE!!!!!!!!!!!!!!!!!
+			#WORKING ON THIS CURRENTLY!!!!!!!!
+			return [colors[0],colors[1],colors[3],colors[2]]
+			return [colors[1],colors[0],colors[2],colors[3]]
 		end
 
-		def one_circle(colors)
-			if @@prev_keys[@@move_num-1].split('').count("O")==1
-				return [colors[0],colors[1],colors[3],colors[2]]
-			else
-				return [colors[1],colors[0],colors[2],colors[3]]
-			end
-		end
-
-		def two_circle(colors)
-			
-		end
-
-		def three_circle(colors)
-			
-		end
-
+		
 		def key_reader(keys,comp_sel)
 			#keys.include?("O")
 			#@@correct_colors<<comp_sel[0] if keys.include?("O")
