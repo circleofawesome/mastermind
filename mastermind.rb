@@ -238,24 +238,37 @@ class AI_Codebreaker < Board
 				guess=comp_guess_position(@@correct_colors)
 				@@position_count+=1
 			end
+			@@computers_selections[@@move_num]=guess
 			return guess
 		end
 
 		def comp_guess_position(colors)
 			#returns array of guesses 
 			return colors.sort! if @@position_count==1
-			keys=@@prev_keys[@@move_num-1].split
+			keys=@@prev_keys[@@move_num-1].split('')
 			if keys.count("O")==1
 				return one_circle(colors)
 			elsif keys.count("O")==2
 				return two_circle(colors)
 			elsif keys.count("O")==3
 				return three_circle(colors)
+			elsif keys.count("O")==0
+				return zero_circle(colors)
 			end
 		end
 
+		def zero_circle(colors)
+			#colors.reverse
+			return colors.shuffle if @@prev_keys[@@move_num-1].split('').count("O")==0
+			return #LEFT OFF HERE!!!!!!!!!!!!!!!!!
+		end
+
 		def one_circle(colors)
-			
+			if @@prev_keys[@@move_num-1].split('').count("O")==1
+				return [colors[0],colors[1],colors[3],colors[2]]
+			else
+				return [colors[1],colors[0],colors[2],colors[3]]
+			end
 		end
 
 		def two_circle(colors)

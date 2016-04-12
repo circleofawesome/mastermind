@@ -238,34 +238,56 @@ class AI_Codebreaker < Board
 				guess=comp_guess_position(@@correct_colors)
 				@@position_count+=1
 			end
+			@@computers_selections[@@move_num]=guess
 			return guess
 		end
 
 		def comp_guess_position(colors)
 			#returns array of guesses 
 			return colors.sort! if @@position_count==1
-			case @@position_count
-			when 2
-				#@@position_count+=1
-				return [colors[1],colors[0],colors[3],colors[2]]
-			when 3
-				#@@position_count+=1
-				return [colors[2],colors[3],colors[0],colors[1]]
-			when 4
-				#@@position_count+=1
-				return [colors[3],colors[2],colors[1],colors[0]]
-			when 5
-				#@@position_count+=1
-				return [colors[3],colors[2],colors[0],colors[1]]
-			when 6
-				#@@position_count+=1
-				return [colors[3],colors[0],colors[2],colors[1]]
-			when 7
-				#@@position_count+=1
-				return [colors[3],colors[2],colors[1],colors[0]]
-			when 8
-				return [colors[2],colors[1],colors[0],colors[3]]
+			keys=@@prev_keys[@@move_num-1].split('')
+			if keys.count("O")==1
+				return one_circle(colors)
+			elsif keys.count("O")==2
+				return two_circle(colors)
+			elsif keys.count("O")==3
+				return three_circle(colors)
+			elsif keys.count("O")==0
+				return zero_circle(colors)
 			end
+		end
+
+		def zero_circle(colors)
+			#colors.reverse
+			colors.shuffle
+		end
+
+		def one_circle(colors)
+			if @@prev_keys[@@move_num-1].split('').count("O")>1
+				ret_arr=two_circle
+				return ret_arr=two_circle
+			end
+			return [colors[1],colors[0],colors[3],colors[2]]
+		end
+
+		def two_circle(colors)
+			@@two_circle_count=true
+			#ret_arr=[colors[1],colors[0],colors[2],colors[3]] if @@two_circle_count==true
+			#@@two_circle_count=false
+			#ret_arr=[colors[0],colors[1],colors[3],colors[2]] if @@two_circle_count==true
+			#return ret_arr
+
+			if @@two_circle_count==true
+				@@two_circle_count=false
+				return [colors[1],colors[0],colors[2],colors[3]]
+			elsif @@two_circle_count==false
+				@@two_circle_count=true
+				return [colors[0],colors[1],colors[3],colors[2]]
+			end
+		end
+
+		def three_circle(colors)
+			[colors[0],colors[1],colors[3],colors[2]] if 
 		end
 
 		def key_reader(keys,comp_sel)
@@ -292,17 +314,12 @@ class AI_Codebreaker < Board
 				return winning_message(comp_sel) if player_sel.eql?(comp_sel)
 				board(@@num_of_moves)
 				@@num_of_moves-=1
-				#comp_sel=comp_guess_colors
-				#return winning_message if player_sel.eql?(comp_sel)
-					##puts row(comp_guess_colors)
 				puts row(comp_sel)
 				prev_guesses
 				keys=player_keys
 				key_reader(keys,comp_sel)
 				@@move_num+=1
 				2.times{puts "\n"}
-				#prev_guesses
-				#break #remove this later
 			end
 			return "You win :(" if @@num_of_moves==0
 		end
