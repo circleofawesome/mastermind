@@ -179,6 +179,7 @@ class Player_Codebreaker < Board
 end
 
 class AI_Codebreaker < Board
+		@@not_it_list={}
 		@@num_of_moves=12
 		@@correct_colors=[]
 		@@computers_selections={}
@@ -244,25 +245,41 @@ class AI_Codebreaker < Board
 
 		def comp_guess_position(colors)
 			#returns array of guesses 
-			return colors.shuffle! if @@position_count==1
+			return colors.sort if @@position_count==1
 			keys=@@prev_keys[@@move_num-1].split('')
 			circles=keys.count("O")
-			case circles
-			when 0
-				return zero_circle(colors)
-			when 1
-				return one_circle(colors)
-			when 2
-				return two_circle(colors)
+
+			num=0
+			4.times{
+				@@not_it_list[colors[num]]=[]
+				num+=1
+			}
+			if circles==0
+				guess=zero(colors)
+			elsif circles==1
+				guess=one(colors)
+			elsif circles==2
+				guess=two(colors)
 			end
+			return guess
 		end
 
-		def zero_circle(colors)
-			#WORKING ON THIS CURRENTLY!!!!!!!!
-			return [colors[0],colors[1],colors[3],colors[2]]
-			return [colors[1],colors[0],colors[2],colors[3]]
+		def zero(colors)
+			num=0
+			4.times{
+				@@not_it_list[colors[num]]<<num
+				num+=1
+			}
+			return shuffler(colors)
 		end
 
+		def shuffler(colors)
+			colors.shuffle!
+			colors.each_index do |i|
+				return shuffler if @@not_it_list[i].include?(i)
+			end
+			return colors
+		end
 		
 		def key_reader(keys,comp_sel)
 			#keys.include?("O")
