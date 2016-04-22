@@ -179,10 +179,10 @@ class Player_Codebreaker < Board
 end
 
 class AI_Codebreaker < Board
-		@@not_it_list={}
 		@@num_of_moves=12
 		@@correct_colors=[]
 		@@computers_selections={}
+		@@not_it_list={}
 		@@position_count=1
 		def players_code
 			puts "1=RED   2=GRE   3=BLU   4=YEL   5=BRW   6=ORG   7=BLK   8=WHT"
@@ -245,15 +245,19 @@ class AI_Codebreaker < Board
 
 		def comp_guess_position(colors)
 			#returns array of guesses 
-			return colors.sort if @@position_count==1
+			#return colors.shuffle! if @@position_count==1
+
+			if @@position_count==1
+				colors.each do |i|
+					@@not_it_list[i]=[0,1,2,3]
+				end
+				return colors.shuffle!
+			end
+			
+			
 			keys=@@prev_keys[@@move_num-1].split('')
 			circles=keys.count("O")
 
-			num=0
-			4.times{
-				@@not_it_list[colors[num]]=[]
-				num+=1
-			}
 			if circles==0
 				guess=zero(colors)
 			elsif circles==1
@@ -265,20 +269,15 @@ class AI_Codebreaker < Board
 		end
 
 		def zero(colors)
-			num=0
-			4.times{
-				@@not_it_list[colors[num]]<<num
-				num+=1
-			}
-			return shuffler(colors)
+			colors[0]=
 		end
 
-		def shuffler(colors)
-			colors.shuffle!
-			colors.each_index do |i|
-				return shuffler if @@not_it_list[i].include?(i)
-			end
-			return colors
+		def one(colors)
+			#code here!
+		end
+
+		def two(colors)
+			#code here!
 		end
 		
 		def key_reader(keys,comp_sel)
