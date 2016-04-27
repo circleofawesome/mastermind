@@ -4,7 +4,7 @@ colors=[1,2,3,4]
 def rearrange(list,colors)
 	shuffled=colors.shuffle
 	shuffled.each do |i|
-		return rearrange(list,colors) if shuffled.index(i)!=list[i][0] && shuffled.index(i)!=list[i][1] && shuffled.index(i)!=list[i][2]
+		return rearrange(list,colors) if list[i].include?(shuffled.index(i))==false
 	end
 	return shuffled
 end
@@ -12,3 +12,8 @@ end
 rearrange(has,colors)
 
 #this works; put this into where rearrange should go in mastermind.rb
+
+def not_list_checker(list,colors)
+	#returns true or false, if false then run the parent function again
+	
+end

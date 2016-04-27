@@ -274,6 +274,8 @@ class AI_Codebreaker < Board
 			end
 			#at this point @@not_it_list contains which positions those particular colors cannot be at 
 			#at this point we run the 'rearrange' method which is being worked on in scrap.rb
+
+			
 		end
 
 		def one(colors)
