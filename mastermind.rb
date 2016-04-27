@@ -260,12 +260,18 @@ class AI_Codebreaker < Board
 
 			if circles==0
 				guess=zero(colors)
-			elsif circles==1
-				guess=one(colors)
-			elsif circles==2
-				guess=two(colors)
+			else
+				guess=non_zero(colors)
 			end
 			return guess
+		end
+
+		def rearrange(list,colors)
+			shuffled=colors.shuffle
+			shuffled.each do |i|
+				return rearrange(list,colors) if list[i].include?(shuffled.index(i))==false
+			end
+			return shuffled
 		end
 
 		def zero(colors)
@@ -274,16 +280,11 @@ class AI_Codebreaker < Board
 			end
 			#at this point @@not_it_list contains which positions those particular colors cannot be at 
 			#at this point we run the 'rearrange' method which is being worked on in scrap.rb
-
-			
+			return rearrange(@@not_it_list,colors)
 		end
 
-		def one(colors)
-			#code here!
-		end
-
-		def two(colors)
-			#code here!
+		def non_zero(colors)
+			return rearrange(@@not_it_list,colors)
 		end
 		
 		def key_reader(keys,comp_sel)
@@ -304,7 +305,7 @@ class AI_Codebreaker < Board
 			@@num_of_moves-=1
 			player_sel=players_code
 			#turn_num=1
-			while @@num_of_moves>0
+			while @@num_of_moves>=0
 				puts "   -= M A S T E R M I N D =-"
 				comp_sel=comp_guess_colors
 				return winning_message(comp_sel) if player_sel.eql?(comp_sel)
@@ -312,12 +313,19 @@ class AI_Codebreaker < Board
 				@@num_of_moves-=1
 				puts row(comp_sel)
 				prev_guesses
+				return losing_message if @@num_of_moves<0
 				keys=player_keys
 				key_reader(keys,comp_sel)
 				@@move_num+=1
 				2.times{puts "\n"}
 			end
-			return "You win :(" if @@num_of_moves==0
+		end
+
+		def losing_message
+			3.times{
+				puts "\n"
+			}
+			puts "You win :("
 		end
 
 		def winning_message(comp_sel)
