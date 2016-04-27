@@ -15,5 +15,7 @@ rearrange(has,colors)
 
 def not_list_checker(list,colors)
 	#returns true or false, if false then run the parent function again
-	
+	return false if list[i].include?(colors.index(i))==false
+	return true
 end
+
