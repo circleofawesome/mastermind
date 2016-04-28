@@ -10,8 +10,6 @@ class Board
 		choices.each do |i|
 			choices_num<<i.to_i
 		end
-		#@@prev_guesses[@@move_num]="[ #{colors[choices_num[0]]} ][ #{colors[choices_num[1]]} ][ #{colors[choices_num[2]]} ][ #{colors[choices_num[3]]} ]"+"    "+"#{keys}"
-		#puts"[ #{colors[choices_num[0]]} ][ #{colors[choices_num[1]]} ][ #{colors[choices_num[2]]} ][ #{colors[choices_num[3]]} ]"+"    "+keys
 		@@prev_guesses[@@move_num]="[ #{colors[choices_num[0]]} ][ #{colors[choices_num[1]]} ][ #{colors[choices_num[2]]} ][ #{colors[choices_num[3]]} ]"+"    "
 	end
 
@@ -88,15 +86,6 @@ class Board
 	end
 
 	def prev_guesses
-		#prevG_arr=@@prev_guesses.to_a.reverse.to_h
-		#prevK_arr=@@prev_keys.to_a.reverse.to_h
-		#prevG_arr.each do |k,v|  ###
-		#	puts v unless k==@@turn ###
-		#end  ###
-		#for i in 1..prevG_arr.length-1
-		#	puts prevG_arr[i] + prevK_arr[i]
-		#end
-		#puts @@prev_guesses
 		count=@@prev_guesses.length-1
 		count.times {
 			puts @@prev_guesses[count]+@@prev_keys[count] unless @@prev_keys.empty?
@@ -152,7 +141,6 @@ class Player_Codebreaker < Board
 		board(@@num_of_moves)
 		@@num_of_moves-=1
 		comp_sel=computer_selection
-		#puts comp_sel #delete this after you finish writing the program
 
 		while @@num_of_moves>-1
 			choices=user_choices
@@ -204,7 +192,6 @@ class AI_Codebreaker < Board
 			end
 			return players_code if code.empty?
 			return players_code if code.length!=4
-			#@@secret_code=code
 			return code
 		end
 
@@ -219,7 +206,6 @@ class AI_Codebreaker < Board
 			keys=keys.split
 			keys.select!{|i|i=~/[O+-]/}
 			return player_keys if keys.length!=4
-			#keys
 			@@prev_keys[@@move_num]=keys.join
 			return keys
 		end
@@ -230,7 +216,7 @@ class AI_Codebreaker < Board
 				@@correct_colors<<8
 				guess=comp_guess_position(@@correct_colors)
 				@@position_count+=1
-				#might be an issue here with guess_count==8, the 8 might need to change
+				
 			end
 			4.times{guess<<@@guess_count} if @@correct_colors.length!=4
 			@@guess_count+=1
@@ -244,8 +230,6 @@ class AI_Codebreaker < Board
 		end
 
 		def comp_guess_position(colors)
-			#returns array of guesses 
-			#return colors.shuffle! if @@position_count==1
 
 			if @@position_count==1
 				colors.each do |i|
@@ -276,7 +260,6 @@ class AI_Codebreaker < Board
 		end
 
 		def no_repeat_guesses(list,colors)
-			#returns false if the guess was already made before
 			list.each do |key,val|
 				return false if colors.eql?(val)
 			end
@@ -287,8 +270,6 @@ class AI_Codebreaker < Board
 			colors.each_index do |i|
 				@@not_it_list[colors[i]].delete(i)
 			end
-			#at this point @@not_it_list contains which positions those particular colors cannot be at 
-			#at this point we run the 'rearrange' method which is being worked on in scrap.rb
 			return rearrange(@@not_it_list,colors)
 		end
 
@@ -297,9 +278,6 @@ class AI_Codebreaker < Board
 		end
 		
 		def key_reader(keys,comp_sel)
-			#keys.include?("O")
-			#@@correct_colors<<comp_sel[0] if keys.include?("O")
-			#@@correct_colors
 			return @@correct_colors if @@correct_colors.length==4
 			num_Os=keys.count("O")
 			num_Os.times {
@@ -313,7 +291,6 @@ class AI_Codebreaker < Board
 			board(@@num_of_moves)
 			@@num_of_moves-=1
 			player_sel=players_code
-			#turn_num=1
 			while @@num_of_moves>=0
 				puts "   -= M A S T E R M I N D =-"
 				comp_sel=comp_guess_colors
@@ -348,6 +325,46 @@ end
 #g1=Player_Codebreaker.new
 #g1.play
 
-g2=AI_Codebreaker.new
-g2.play
+#g2=AI_Codebreaker.new
+#g2.play
 
+def gap
+	3.times{
+    	puts "\n"
+    }
+end
+
+
+def mastermind
+	puts "                                         
+ ._ _   _.  _ _|_  _  ._ ._ _  o ._   _| 
+ | | | (_| _>  |_ (/_ |  | | | | | | (_| 
+                                         "
+    gap
+    puts "Let's play Mastermind!"
+    gap
+    puts "Are you the Codemaker or Codebreaker?"
+    gap
+    puts "Press '1' for Codemaker; Press '2' for Codebreaker"
+    choice=gets.chomp
+    if choice.to_i==1
+    	game=AI_Codebreaker.new
+    	game.play
+    elsif choice.to_i==2
+    	game=Player_Codebreaker.new
+    	game.play
+    else
+    	puts "Let's try this again, please follow the instructions"
+    	mastermind
+    end
+    #gap
+    #puts "Would you like to play again?"
+    #gap
+    #puts "Press 'Y' for yes"
+    #choice=gets.chomp
+    #return mastermind if choice=="Y"
+    ##the issue here has to do with the prev_guesses class variable 
+
+end
+
+mastermind
