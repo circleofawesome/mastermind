@@ -271,7 +271,16 @@ class AI_Codebreaker < Board
 			shuffled.each do |i|
 				return rearrange(list,colors) if list[i].include?(shuffled.index(i))==false
 			end
+			return rearrange(list,colors) if no_repeat_guesses(list,colors)==false
 			return shuffled
+		end
+
+		def no_repeat_guesses(list,colors)
+			#returns false if the guess was already made before
+			list.each do |key,val|
+				return false if colors.eql?(val)
+			end
+			return true
 		end
 
 		def zero(colors)
