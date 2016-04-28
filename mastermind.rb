@@ -271,7 +271,7 @@ class AI_Codebreaker < Board
 			shuffled.each do |i|
 				return rearrange(list,colors) if list[i].include?(shuffled.index(i))==false
 			end
-			return rearrange(list,colors) if no_repeat_guesses(list,colors)==false
+			return rearrange(list,colors) if no_repeat_guesses(@@computers_selections,shuffled)==false
 			return shuffled
 		end
 
